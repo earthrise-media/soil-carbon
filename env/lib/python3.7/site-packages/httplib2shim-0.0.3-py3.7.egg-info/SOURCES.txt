@@ -1,0 +1,11 @@
+README.rst
+setup.cfg
+setup.py
+httplib2shim/__init__.py
+httplib2shim.egg-info/PKG-INFO
+httplib2shim.egg-info/SOURCES.txt
+httplib2shim.egg-info/dependency_links.txt
+httplib2shim.egg-info/requires.txt
+httplib2shim.egg-info/top_level.txt
+httplib2shim/test/__init__.py
+httplib2shim/test/httplib2_test.py
