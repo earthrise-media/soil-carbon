@@ -17,7 +17,8 @@ st.markdown("""
 def load_data(plot=True):
 	data = {
 		"ocarbon": pd.read_pickle('data/ocarbon.pkl'),
-		"soilgrid_corr": pd.read_pickle('data/soilgrid_corr.pkl')
+		"soilgrid_corr": pd.read_pickle('data/soilgrid_corr.pkl'),
+		"soilgrid_corr_buffered": pd.read_pickle('data/soilgrid_corr_buffered.pkl')
 	}
 	return data
 
@@ -158,7 +159,55 @@ st.markdown("""
 
 """)
 
+st.markdown("""
+	
+	The concordance between the point measurement and the pixel space is still
+	unclear.  How does a point measurement relate to an average calculated over a
+	continuous area? 
 
+	To examine this, we run the same regression, but instead of the SoilGrids
+	value of the pixel that the WoSIS measurement falls within, we use the
+	average SoilGrids value of all 250m pixels within a 2km radius.
+
+""")
+
+soilgrid_corr_buffered = data["soilgrid_corr_buffered"]
+
+buff_c = alt.Chart(soilgrid_corr_buffered).mark_circle(
+		opacity=0.5,
+		color="#A9BEBE"
+	).encode(
+	    alt.X(
+	    	'wosis:Q',
+	    	scale=alt.Scale(domain=[0,90], clamp=True),
+	    	title="WoSIS measurement"
+	    ),
+	    alt.Y(
+	    	'soilgrids:Q',
+	    	title="SoilGrid value (2km buffer)"
+	    )
+)
+
+st.altair_chart(buff_c, use_container_width=True)
+
+
+st.markdown("""
+	
+	A quick linear regression reveals that the average is slightly more precise,
+	probably because some of the noise in the pixel-level analysis was reduced. 
+	The R-squared value increases from 0.69 to 0.74 for the single-covariate
+	regression.  More of the variation in the SoilGrids value is explained by the
+	WoSIS measurements.  This doesn't mean much for the predictive or policy
+	value of SoilGrids, however, but just that some of the noise has been
+	reduced.  Indeed, the variation in SoilGrids measurements drops by 85% when
+	averaged over the 2km radius.  The agreement between WoSIS and this
+	transformed variable is not convincingly improved.
+
+	It would be more computationally efficient to just throw out "bad" values, or
+	those SoilGrid measurements that are zero, rather than averaging over a 2km
+	radius.
+
+""")
 
 st.markdown("""
 	#### [OpenLandMap](https://openlandmap.org/)
