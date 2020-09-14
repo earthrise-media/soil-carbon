@@ -139,6 +139,7 @@ base = alt.Chart(soilgrid_corr).mark_circle(
 	    )
 )
 
+
 st.altair_chart(base, use_container_width=True)
 
 st.markdown("""
@@ -236,7 +237,11 @@ osm_c = alt.Chart(olm_soilgrids_merged).mark_circle(
 	    )
 )
 
-st.altair_chart(osm_c, use_container_width=True)
+r = osm_c + osm_c.transform_regression(
+	'olm', 'soilgrids', method='linear'
+).mark_line(color="#e45756")
+
+st.altair_chart(r, use_container_width=True)
 
 st.markdown("""
 
