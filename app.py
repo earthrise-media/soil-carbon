@@ -18,7 +18,8 @@ def load_data(plot=True):
 	data = {
 		"ocarbon": pd.read_pickle('data/ocarbon.pkl'),
 		"soilgrid_corr": pd.read_pickle('data/soilgrid_corr.pkl'),
-		"soilgrid_corr_buffered": pd.read_pickle('data/soilgrid_corr_buffered.pkl')
+		"soilgrid_corr_buffered": pd.read_pickle('data/soilgrid_corr_buffered.pkl'),
+		"olm_soilgrids_merged": pd.read_pickle('data/olm_soilgrids_merged.pkl')
 	}
 	return data
 
@@ -183,7 +184,7 @@ buff_c = alt.Chart(soilgrid_corr_buffered).mark_circle(
 	    	title="WoSIS measurement"
 	    ),
 	    alt.Y(
-	    	'soilgrids:Q',
+	    	'soilgrid:Q',
 	    	title="SoilGrid value (2km buffer)"
 	    )
 )
@@ -211,6 +212,33 @@ st.markdown("""
 
 st.markdown("""
 	#### [OpenLandMap](https://openlandmap.org/)
+
+	The correspondence between Open Land Map and SoilGrids is pretty good over a
+	large region.  But still suggests that reporting uncertainty on trends
+	(addressing fixed effects and fixed uncertainty effects) is a pretty good
+	course of action.
+
+""")
+
+olm_soilgrids_merged = data["olm_soilgrids_merged"]
+
+osm_c = alt.Chart(olm_soilgrids_merged).mark_circle(
+		opacity=0.5,
+		color="#A9BEBE"
+	).encode(
+	    alt.X(
+	    	'olm:Q',
+	    	title="Open Land Map (g/kg)"
+	    ),
+	    alt.Y(
+	    	'soilgrids:Q',
+	    	title="SoilGrid (g/dm3)"
+	    )
+)
+
+st.altair_chart(osm_c, use_container_width=True)
+
+st.markdown("""
 
 	#### [Copernicus Global Land Service](https://zenodo.org/record/3938963#.X1q1e5NKgsk)
 
