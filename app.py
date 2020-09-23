@@ -259,3 +259,129 @@ st.markdown(
 
 """
 )
+
+st.header("Forest Carbon")
+
+st.markdown("""
+
+	### Data Sources
+
+	#### [Global Ecosystem Dynamics Investigation](https://gedi.umd.edu) (GEDI)
+
+	GEDI is high resolution laser ranging of Earth’s forests and topography from
+	the International Space Station (ISS).  The first major paper published based
+	on these data was the Popotov (2020) [dataset on global tree
+	height](https://glad.umd.edu/dataset/gedi).  There are dozens of additional
+	derived datasets on the three-dimensional structure of forests, and
+	calibration of existing optical imagery. (e.g., *Highly Local Model
+	Calibration with a New GEDI LiDAR Asset on Google Earth Engine Reduces
+	Landsat Forest Height Signal Saturation*, [Healy
+	(2020)](https://www.mdpi.com/2072-4292/12/17/2840)).
+
+	#### [Harmonized global maps of above and belowground biomass carbon density in the year 2010](https://www.nature.com/articles/s41597-020-0444-4)
+
+	This dataset provides temporally consistent and harmonized global maps of
+	aboveground and belowground biomass carbon density for the year 2010 at a
+	300-m spatial resolution. The aboveground biomass map integrates land-cover
+	specific, remotely sensed maps of woody, grassland, cropland, and tundra
+	biomass. Input maps were amassed from the published literature and, where
+	necessary, updated to cover the focal extent or time period. The belowground
+	biomass map similarly integrates matching maps derived from each aboveground
+	biomass map and land-cover specific empirical models. Aboveground and
+	belowground maps were then integrated separately using ancillary maps of
+	percent tree cover and landcover and a rule-based decision tree. Maps
+	reporting the accumulated uncertainty of pixel-level estimates are also
+	provided.
+
+	#### [UNEP-WCMC Biomass Dataset](https://royalsocietypublishing.org/doi/10.1098/rstb.2019.0128)
+
+	This dataset represents above- and below-ground terrestrial carbon storage
+	(tonnes (t) of C per hectare (ha)) for circa 2010. The dataset was
+	constructed by combining the most reliable publicly available datasets and
+	overlaying them with the ESA CCI landcover map for the year 2010 (ESA, 2017),
+	assigning to each grid cell the corresponding above-ground biomass value from
+	the biomass map that was most appropriate for the grid cell's landcover type.
+	Input carbon datasets were identified through a literature review of existing
+	datasets on biomass carbon in terrestrial ecosystems published in
+	peer-reviewed literature. To determine which datasets to combine to produce
+	the global carbon density map, identified datasets were evaluated based on
+	resolution, accuracy, biomass definition and reference date (see Table 1 in
+	paper cited for further information on datasets selected). After aggregating
+	each selected dataset to a nominal scale of 300 m resolution, forest
+	categories in the CCI ESA 2010 landcover dataset were used to extract
+	above-ground biomass from Santoro et al. 2018 for forest areas. Woodland and
+	savanna biomass were then incorporated for Africa from Bouvet et al. 2018.,
+	and from Santoro et al. 2018 for areas outside of Africa and outside of
+	forest. Biomass from croplands, sparse vegetation and grassland landcover
+	classes from CCI ESA, in addition to shrubland areas outside Africa missing
+	from Santoro et al. 2018, were extracted from were extracted from Xia et al.
+	2014. and Spawn et al. 2017 averaged by ecological zone for each landcover
+	type. Below-ground biomass were added using root-to-shoot ratios from the
+	2006 IPCC guidelines for National Greenhouse Gas Inventories (IPCC, 2006). No
+	below-ground values were assigned to croplands as ratios were unavailable.
+	Above-and-below-ground biomass were then summed together and multiplied by
+	0.5 to convert to carbon, generating a single above-and-below-ground biomass
+	carbon layer. This dataset has not been validated.
+
+	#### [Global, 30-m resolution continuous fields of tree cover](https://www.tandfonline.com/doi/full/10.1080/17538947.2013.786146)
+
+	The Landsat Vegetation Continuous Fields (VCF) tree cover layers contain
+	estimates of the percentage of horizontal ground in each 30-m pixel covered
+	by woody vegetation greater than 5 meters in height. The dataset is available
+	for four epochs centered on the years 2000, 2005, 2010 and 2015. The dataset
+	is derived from the GFCC Surface Reflectance product (GFCC30SR), which is
+	based on enhanced Global Land Survey (GLS) datasets. The GLS datasets are
+	composed of high-resolution Landsat 5 Thematic Mapper (TM) and Landsat 7
+	Enhanced Thematic Mapper Plus (ETM+) images at 30 meter resolution.
+
+	Tree cover, the proportional, vertically projected area of vegetation
+	(including leaves, stems, branches, etc.) of woody plants above a given
+	height, affects terrestrial energy and water exchanges, photosynthesis and
+	transpiration, net primary production, and carbon and nutrient fluxes. Tree
+	cover also affects habitat quality and movements of wildlife, residential
+	property value for humans, and other ecosystem services. The continuous
+	classification scheme of the VCF product enables better depiction of land
+	cover gradients than traditional discrete classification schemes. Importantly
+	for detection and monitoring of forest changes (e.g., deforestation and
+	degradation), tree cover provides a measurable attribute upon which to define
+	forest cover and its changes. Changes in tree cover over time can be used to
+	monitor and retrieve site-specific histories of forest change.
+
+	#### [High-Resolution Global Maps of 21st-Century Forest Cover Change](https://science.sciencemag.org/content/342/6160/850)
+
+	Results from time-series analysis of Landsat images in characterizing global
+	forest extent and change from 2000 through 2019. Trees are defined as
+	vegetation taller than 5m in height and are expressed as a percentage per
+	output grid cell as ‘2000 Percent Tree Cover’. ‘Forest Cover Loss’ is defined
+	as a stand-replacement disturbance, or a change from a forest to non-forest
+	state, during the period 2000–2019. ‘Forest Cover Gain’ is defined as the
+	inverse of loss, or a non-forest to forest change entirely within the period
+	2000–2012. ‘Forest Loss Year’ is a disaggregation of total ‘Forest Loss’ to
+	annual time scales. Reference 2000 and 2019 imagery are median observations
+	from a set of quality assessment-passed growing season observations.
+
+	#### [Costa Rica National Inventory of Greenhouse Gases (INGEI)](http://sinamecc.opendata.junar.com/dashboards/21151/inventario-nacional-de-gases-de-efecto-invernadero-ingei/)
+
+	The National Inventory of Greenhouse Gases (INGEI) counts the gases emitted
+	and absorbed from the atmosphere during a calendar year for the Costa Rican
+	territory, according to the guidelines established by the Intergovernmental
+	Group of Experts on Climate Change (IPCC).  Note; The inventories for 1990,
+	1996 and 2000 are not comparable as they were calculated with a different
+	methodology than the recent inventories. They are currently being
+	recalculated to be comparable. Privileged access is available through the
+	current Ministry of the Environment.
+
+""")
+
+
+
+
+
+
+
+
+
+
+
+
+
