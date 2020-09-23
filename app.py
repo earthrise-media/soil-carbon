@@ -7,35 +7,34 @@ from PIL import Image
 
 st.header("Soil carbon")
 
-st.markdown("""
+st.markdown(
+    """
 
 > _A running narrative on measuring below-ground carbon measurement._
 
-""")
+"""
+)
+
 
 @st.cache(persist=True)
 def load_data(plot=True):
-	data = {
-		"ocarbon": pd.read_pickle('data/ocarbon.pkl'),
-		"soilgrid_corr": pd.read_pickle('data/soilgrid_corr.pkl'),
-		"soilgrid_corr_buffered": pd.read_pickle('data/soilgrid_corr_buffered.pkl'),
-		"olm_soilgrids_merged": pd.read_pickle('data/olm_soilgrids_merged.pkl')
-	}
-	return data
+    data = {
+        "ocarbon": pd.read_pickle("data/ocarbon.pkl"),
+        "soilgrid_corr": pd.read_pickle("data/soilgrid_corr.pkl"),
+        "soilgrid_corr_buffered": pd.read_pickle("data/soilgrid_corr_buffered.pkl"),
+        "olm_soilgrids_merged": pd.read_pickle("data/olm_soilgrids_merged.pkl"),
+    }
+    return data
+
 
 data = load_data()
 
-st.markdown("""
+f = open('intro_framing.md','r')
+intro_framing = f.read()
+st.markdown(intro_framing)
 
-	### Introduction and framing
-
-	**Chris** will start on this.
-
-		Quantify and map uncertainty around soil carbon trends
-
-""")
-
-st.markdown("""
+st.markdown(
+    """
 
 	### Data exploration
 
@@ -51,51 +50,50 @@ st.markdown("""
 	interpolate the point samples from the [World Soil Information
 	Service](https://www.isric.org/explore/wosis/faq-wosis) (WoSIS), a large
 	PostgreSQL database developed and maintained by ISRIC, WDC-Soils.
-""")
+"""
+)
 
-image = Image.open('imgs/wosis_points.png')
+image = Image.open("imgs/wosis_points.png")
 
 st.image(
-	image, 
-	caption='Organic Soil Carbon (0-30cm) processed from the WoSIS data',
-	use_column_width=True
+    image,
+    caption="Organic Soil Carbon (0-30cm) processed from the WoSIS data",
+    use_column_width=True,
 )
 
 ocarbon = data["ocarbon"]
 nrow, _ = ocarbon.shape
 lamb = ocarbon.orgc_value_avg.mean()
 
-st.markdown("""
-	
+st.markdown(
+    """
+
 	After some pre-processing, detailed in the associated `clean.ipynb`,  are %s
 	point measurements.  The distribtion of organic soil carbon measurements look
 	like a Poisson distribution with &lambda;=%s, maybe with a fatter tail.
 
-""" % (
-		"{:,d}".format(nrow),
-		np.round(lamb, 1)
-	)
+"""
+    % ("{:,d}".format(nrow), np.round(lamb, 1))
 )
 
 df = ocarbon[ocarbon.orgc_value_avg < 100]
-c = alt.Chart(df).mark_bar(
-		color="#A9BEBE",
-		size=5
-	).encode(
-	    x=alt.X(
-	    	'orgc_value_avg:Q',
-	    	bin=alt.Bin(step=1),
-        	title="Organic carbon content (0-30cm)"
+c = (
+    alt.Chart(df)
+    .mark_bar(color="#A9BEBE", size=5)
+    .encode(
+        x=alt.X(
+            "orgc_value_avg:Q",
+            bin=alt.Bin(step=1),
+            title="Organic carbon content (0-30cm)",
         ),
-	    y=alt.Y(
-	    	'count():Q',
-	    	title="Frequency"
-	    )
+        y=alt.Y("count():Q", title="Frequency"),
+    )
 )
 
 st.altair_chart(c, use_container_width=True)
 
-st.markdown("""
+st.markdown(
+    """
 
 	Now, consider the SoilGrids data.  A sample of the U.S., three square tiles
 	at 2 degrees sides is plotted below, where lighter colors indicate higher
@@ -103,46 +101,48 @@ st.markdown("""
 	projection being totally ignored &mdash; the image is just for, literally,
 	color commentary.*   This area contains 4,095 WoSIS measurements.
 
-""")
-
-image = Image.open('imgs/soilgrids_sample.png')
-
-st.image(
-	image, 
-	caption='SoilGrids sample in the U.S. (six degrees across)',
-	use_column_width=True
+"""
 )
 
-st.markdown("""
-	
+image = Image.open("imgs/soilgrids_sample.png")
+
+st.image(
+    image,
+    caption="SoilGrids sample in the U.S. (six degrees across)",
+    use_column_width=True,
+)
+
+st.markdown(
+    """
+
 	The SoilGrid data is a very rough approximation of the ground samples.  Much
 	more precise research and coordination has to be done (**Chris, help!!**) to
 	ensure that we're comparing apples to apples, but the scatterplot below shows
 	that the correlation is positive but weak.
 
-""")
+"""
+)
 
 soilgrid_corr = data["soilgrid_corr"]
 
-base = alt.Chart(soilgrid_corr).mark_circle(
-		opacity=0.5,
-		color="#A9BEBE"
-	).encode(
-	    alt.X(
-	    	'wosis:Q',
-	    	scale=alt.Scale(domain=[0,90], clamp=True),
-	    	title="WoSIS measurement"
-	    ),
-	    alt.Y(
-	    	'soilgrid:Q',
-	    	title="SoilGrid pixel (250m) value"
-	    )
+base = (
+    alt.Chart(soilgrid_corr)
+    .mark_circle(opacity=0.5, color="#A9BEBE")
+    .encode(
+        alt.X(
+            "wosis:Q",
+            scale=alt.Scale(domain=[0, 90], clamp=True),
+            title="WoSIS measurement",
+        ),
+        alt.Y("soilgrid:Q", title="SoilGrid pixel (250m) value"),
+    )
 )
 
 
 st.altair_chart(base, use_container_width=True)
 
-st.markdown("""
+st.markdown(
+    """
 
 	[SoilGrids addresses the uncertainty directly](https://www.isric.org/explore/soilgrids/faq-soilgrids-2017#How_accurate_are_SoilGrids_predictions):
 
@@ -159,44 +159,46 @@ st.markdown("""
 	explicit, a **value added would be to report the uncertainty translates for
 	agricultural land and how that uncertainty translates into trends.**
 
-""")
+"""
+)
 
-st.markdown("""
-	
+st.markdown(
+    """
+
 	The concordance between the point measurement and the pixel space is still
 	unclear.  How does a point measurement relate to an average calculated over a
-	continuous area? 
+	continuous area?
 
 	To examine this, we run the same regression, but instead of the SoilGrids
 	value of the pixel that the WoSIS measurement falls within, we use the
 	average SoilGrids value of all 250m pixels within a 2km radius.
 
-""")
+"""
+)
 
 soilgrid_corr_buffered = data["soilgrid_corr_buffered"]
 
-buff_c = alt.Chart(soilgrid_corr_buffered).mark_circle(
-		opacity=0.5,
-		color="#A9BEBE"
-	).encode(
-	    alt.X(
-	    	'wosis:Q',
-	    	scale=alt.Scale(domain=[0,90], clamp=True),
-	    	title="WoSIS measurement"
-	    ),
-	    alt.Y(
-	    	'soilgrid:Q',
-	    	title="SoilGrid value (2km buffer)"
-	    )
+buff_c = (
+    alt.Chart(soilgrid_corr_buffered)
+    .mark_circle(opacity=0.5, color="#A9BEBE")
+    .encode(
+        alt.X(
+            "wosis:Q",
+            scale=alt.Scale(domain=[0, 90], clamp=True),
+            title="WoSIS measurement",
+        ),
+        alt.Y("soilgrid:Q", title="SoilGrid value (2km buffer)"),
+    )
 )
 
 st.altair_chart(buff_c, use_container_width=True)
 
 
-st.markdown("""
-	
+st.markdown(
+    """
+
 	A quick linear regression reveals that the average is slightly more precise,
-	probably because some of the noise in the pixel-level analysis was reduced. 
+	probably because some of the noise in the pixel-level analysis was reduced.
 	The R-squared value increases from 0.69 to 0.74 for the single-covariate
 	regression.  More of the variation in the SoilGrids value is explained by the
 	WoSIS measurements.  This doesn't mean much for the predictive or policy
@@ -209,9 +211,11 @@ st.markdown("""
 	those SoilGrid measurements that are zero, rather than averaging over a 2km
 	radius.
 
-""")
+"""
+)
 
-st.markdown("""
+st.markdown(
+    """
 	#### [OpenLandMap](https://openlandmap.org/)
 
 	The correspondence between Open Land Map and SoilGrids is pretty good over a
@@ -219,31 +223,28 @@ st.markdown("""
 	(addressing fixed effects and fixed uncertainty effects) is a pretty good
 	course of action.
 
-""")
+"""
+)
 
 olm_soilgrids_merged = data["olm_soilgrids_merged"]
 
-osm_c = alt.Chart(olm_soilgrids_merged).mark_circle(
-		opacity=0.5,
-		color="#A9BEBE"
-	).encode(
-	    alt.X(
-	    	'olm:Q',
-	    	title="Open Land Map (g/kg)"
-	    ),
-	    alt.Y(
-	    	'soilgrids:Q',
-	    	title="SoilGrid (g/dm3)"
-	    )
+osm_c = (
+    alt.Chart(olm_soilgrids_merged)
+    .mark_circle(opacity=0.5, color="#A9BEBE")
+    .encode(
+        alt.X("olm:Q", title="Open Land Map (g/kg)"),
+        alt.Y("soilgrids:Q", title="SoilGrid (g/dm3)"),
+    )
 )
 
-r = osm_c + osm_c.transform_regression(
-	'olm', 'soilgrids', method='linear'
-).mark_line(color="#e45756")
+r = osm_c + osm_c.transform_regression("olm", "soilgrids", method="linear").mark_line(
+    color="#e45756"
+)
 
 st.altair_chart(r, use_container_width=True)
 
-st.markdown("""
+st.markdown(
+    """
 
 	#### [Copernicus Global Land Service](https://zenodo.org/record/3938963#.X1q1e5NKgsk)
 
@@ -256,4 +257,5 @@ st.markdown("""
 	1. [Soil Organic Carbon Mapping Cookbook 2nd Edition](http://www.fao.org/documents/card/en/c/I8895EN)
 	2. [Predictive Soil Mapping with R](https://soilmapper.org/PSMwR_lulu.pdf)
 
-""")
+"""
+)
